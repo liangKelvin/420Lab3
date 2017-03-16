@@ -1,6 +1,6 @@
 all:
 	gcc datagen.c Lab3IO.c -o datagen
-	gcc-6 -fopenmp main.c Lab3IO.c -o main
+	gcc -fopenmp main.c Lab3IO.c -o main
 	gcc serialtester.c Lab3IO.c -o serialtester -lm
 
 clean:
