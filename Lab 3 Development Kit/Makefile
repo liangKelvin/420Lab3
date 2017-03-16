@@ -1,13 +1,14 @@
 all:
 	gcc datagen.c Lab3IO.c -o datagen
-	gcc -fopenmp test.c Lab3IO.c -o test
+	gcc-6 -fopenmp main.c Lab3IO.c -o main
 	gcc serialtester.c Lab3IO.c -o serialtester -lm
 
 clean:
 	rm datagen
 	rm serialtester
-	rm test
+	rm main
+	rm data_input
 
 run:
 	./datagen
-	./test
+	./main
