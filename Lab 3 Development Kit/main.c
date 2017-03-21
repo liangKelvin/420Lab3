@@ -12,8 +12,8 @@ int main(int argc, char* argv[]) {
 	int i, j, k, size;
 	double** Au;
 	double* X;
-	double temp,tempVal, error, Xnorm;
-    double start; double end;
+	double temp, error, Xnorm;
+    	double start; double end;
 	int* index;
 	FILE* fp;
 
@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 	    printf("size: %d\n", size);
 	    GET_TIME(start);
 
-	    #pragma omp parallel for
+	    #pragma omp for
 	    for (i = 0; i < size; ++i)
 		index[i] = i;
 
@@ -67,18 +67,18 @@ int main(int argc, char* argv[]) {
 		            Au[index[i]][j] -= Au[index[k]][j] * temp;
 		    }       
 		}
-		/*Jordan elimination*/
+		/*Jordan elimination*/		
+		#pragma omp parallel shared(Au, index, size) private(i, temp, k)		
 		for (k = size - 1; k > 0; --k){
-		    #pragma omp parallel for shared(Au, index, k, size) private(i, temp)
+		    #pragma omp for 
 		    for (i = k - 1; i >= 0; --i ){
-		        //tempVal = Au[index[k]][k];
 			temp = Au[index[i]][k] / Au[index[k]][k];
 		        Au[index[i]][k] -= temp * Au[index[k]][k];
 		        Au[index[i]][size] -= temp * Au[index[k]][size];
 		    } 
 		}
 		/*solution*/
-		#pragma omp parallel for
+		#pragma omp for
 		for (k=0; k< size; ++k)
 		    X[k] = Au[index[k]][size] / Au[index[k]][k];
 	    }
